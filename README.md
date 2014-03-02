@@ -9,7 +9,7 @@ With this prototype implementation forms can be generated from openEHR operation
   <li>This prototype implementation has been developed using Eclipse Juno with m2e – Maven Integration for Eclipse.</li>
   <li>The <a href="https://github.com/wware/openehr-java">openEHR Java Libs (1.0.2)</a> need to be build and imported as Maven projects into the workspace.</li>
   <li>OpenMRS version 1.9 and the XForms module version 4.2.1.0 have been used to test the implementation.</li>
-  <li>The SQL statements provided in the file "openehr-metadata-script.sql" must be applied to the OpenMRS mySQL database in order for the code to work.</li>
+  <li>The SQL statements provided in the file "src/main/resources/openehr-metadata-script.sql" must be applied to the OpenMRS mySQL database in order for the code to work.</li>
 </ul>
 
 <h3>Start</h3>
