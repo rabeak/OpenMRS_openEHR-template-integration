@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: Rabea
+Build-Jdk: 1.7.0_09
+Specification-Title: openmrs-template-integration-v2
+Specification-Version: 0.0.1-SNAPSHOT
+Implementation-Title: openmrs-template-integration-v2
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: openmrs-template-integration-v2
+Created-By: Maven Integration for Eclipse
+

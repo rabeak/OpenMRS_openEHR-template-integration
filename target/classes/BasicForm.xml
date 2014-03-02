@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xf:xforms xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jr="http://openrosa.org/javarosa">
+  <xf:model id="openmrs_model">
+    <xf:instance id="openmrs_model_instance">
+      <form id="12" name="FormTemplate" version="0.1" uuid="87ebe6bd-8fa6-4270-bffe-7551de81e850" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003">
+  <header>
+    <enterer></enterer>
+    <date_entered></date_entered>
+    <session></session>
+    <uid></uid>
+  </header>
+  <patient>
+    <patient.birthdate openmrs_table="patient" openmrs_attribute="birthdate"></patient.birthdate>
+    <patient.birthdate_estimated openmrs_table="patient" openmrs_attribute="birthdate_estimated"></patient.birthdate_estimated>
+    <patient.family_name openmrs_table="patient_name" openmrs_attribute="family_name"></patient.family_name>
+    <patient.given_name openmrs_table="patient_name" openmrs_attribute="given_name"></patient.given_name>
+    <patient.medical_record_number openmrs_table="patient_identifier" openmrs_attribute="identifier"></patient.medical_record_number>
+    <patient.middle_name openmrs_table="patient_name" openmrs_attribute="middle_name"></patient.middle_name>
+    <patient.patient_id openmrs_table="patient" openmrs_attribute="patient_id"></patient.patient_id>
+    <patient.sex openmrs_table="patient" openmrs_attribute="gender"></patient.sex>
+    <patient.tribe openmrs_table="patient" openmrs_attribute="tribe"></patient.tribe>
+    <patient_address.address1 openmrs_table="patient_address" openmrs_attribute="address1"></patient_address.address1>
+    <patient_address.address2 openmrs_table="patient_address" openmrs_attribute="address2"></patient_address.address2>
+  </patient>
+  <encounter>
+    <encounter.encounter_datetime openmrs_table="encounter" openmrs_attribute="encounter_datetime">'today()'</encounter.encounter_datetime>
+    <encounter.location_id openmrs_table="encounter" openmrs_attribute="location_id"></encounter.location_id>
+    <encounter.provider_id openmrs_table="encounter" openmrs_attribute="provider_id"></encounter.provider_id>
+  </encounter>
+  <obs openmrs_concept="1238^MEDICAL RECORD OBSERVATIONS^99DCT" openmrs_datatype="ZZ">
+  </obs>
+  <other></other></form>
+    </xf:instance>
+    <xf:bind id="patient.birthdate" nodeset="/form/patient/patient.birthdate" type="xsd:date" locked="true()" jr:preload="patient" jr:preloadParams="birthDate"></xf:bind>
+    <xf:bind id="patient.birthdate_estimated" nodeset="/form/patient/patient.birthdate_estimated" type="xsd:boolean" locked="true()"></xf:bind>
+    <xf:bind id="patient.family_name" nodeset="/form/patient/patient.family_name" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="familyName"></xf:bind>
+    <xf:bind id="patient.given_name" nodeset="/form/patient/patient.given_name" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="givenName"></xf:bind>
+    <xf:bind id="patient.medical_record_number" nodeset="/form/patient/patient.medical_record_number" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="patientIdentifier"></xf:bind>
+    <xf:bind id="patient.middle_name" nodeset="/form/patient/patient.middle_name" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="middleName"></xf:bind>
+    <xf:bind id="patient.patient_id" nodeset="/form/patient/patient.patient_id" type="xsd:int" required="true()" visible="false()" jr:preload="patient" jr:preloadParams="patientId"></xf:bind>
+    <xf:bind id="patient.sex" nodeset="/form/patient/patient.sex" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="sex"></xf:bind>
+    <xf:bind id="patient.tribe" nodeset="/form/patient/patient.tribe" type="xsd:string" locked="true()"></xf:bind>
+    <xf:bind id="patient_address.address1" nodeset="/form/patient/patient_address.address1" type="xsd:string" locked="true()"></xf:bind>
+    <xf:bind id="patient_address.address2" nodeset="/form/patient/patient_address.address2" type="xsd:string" locked="true()"></xf:bind>
+    <xf:bind id="encounter.encounter_datetime" nodeset="/form/encounter/encounter.encounter_datetime" type="xsd:date" constraint=". &amp;lt;= today()" message="Encounter date cannot be after today" required="true()"></xf:bind>
+    <xf:bind id="encounter.location_id" nodeset="/form/encounter/encounter.location_id" type="xsd:int" required="true()"></xf:bind>
+    <xf:bind id="encounter.provider_id" nodeset="/form/encounter/encounter.provider_id" type="xsd:int" required="true()"></xf:bind>
+  </xf:model>
+  <xf:group id="1">
+    <xf:label>Page1</xf:label>
+    <xf:input bind="patient.birthdate">
+      <xf:label>BIRTHDATE     </xf:label>
+    </xf:input>
+    <xf:input bind="patient.birthdate_estimated">
+      <xf:label>BIRTHDATE ESTIMATED     </xf:label>
+    </xf:input>
+    <xf:input bind="patient.family_name">
+      <xf:label>FAMILY NAME     </xf:label>
+    </xf:input>
+    <xf:input bind="patient.given_name">
+      <xf:label>GIVEN NAME     </xf:label>
+    </xf:input>
+    <xf:input bind="patient.medical_record_number">
+      <xf:label>MEDICAL RECORD NUMBER     </xf:label>
+    </xf:input>
+    <xf:input bind="patient.middle_name">
+      <xf:label>MIDDLE NAME     </xf:label>
+    </xf:input>
+    <xf:input bind="patient.patient_id">
+      <xf:label>PATIENT ID     </xf:label>
+    </xf:input>
+    <xf:input bind="patient.sex">
+      <xf:label>SEX     </xf:label>
+    </xf:input>
+    <xf:input bind="patient.tribe">
+      <xf:label>TRIBE     </xf:label>
+    </xf:input>
+    <xf:input bind="patient_address.address1">
+      <xf:label>ADDRESS1     </xf:label>
+    </xf:input>
+    <xf:input bind="patient_address.address2">
+      <xf:label>ADDRESS2     </xf:label>
+    </xf:input>
+    <xf:input bind="encounter.encounter_datetime">
+      <xf:label>ENCOUNTER DATETIME     </xf:label>
+    </xf:input>
+    <xf:select1 bind="encounter.location_id">
+      <xf:label>LOCATION ID     </xf:label>
+      <xf:item>
+        <xf:label>Unknown Location [1]</xf:label>
+        <xf:value>1</xf:value>
+      </xf:item>
+    </xf:select1>
+    <xf:select1 bind="encounter.provider_id">
+      <xf:label>PROVIDER ID     </xf:label>
+      <xf:item>
+        <xf:label>Super User [1]</xf:label>
+        <xf:value>1</xf:value>
+      </xf:item>
+    </xf:select1>
+  </xf:group>
+</xf:xforms>

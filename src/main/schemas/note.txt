@@ -1,0 +1,2 @@
+- Schemas were taken from the openehr homepage: https://github.com/openEHR/reference-models/tree/master/models/openEHR/Release-1.0.2/XSD.
+- The schema "Template.xsd" has been replaced with a schema for operational templates (taken from http://openehr.codeplex.com/).
