@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="openEHR/v1/Template">
+  <id>104d468b-9666-450c-b4c0-15fe67c508a6</id>
+  <name>openEHR-EHR-OBSERVATION.t_respiration.v1</name>
+  <description>
+    <lifecycle_state>Initial</lifecycle_state>
+    <details>
+      <purpose />
+      <use />
+      <misuse />
+    </details>
+    <other_details>
+      <item>
+        <key>MetaDataSet:Sample Set </key>
+        <value>Template metadata sample set </value>
+      </item>
+      <item>
+        <key>Acknowledgements</key>
+        <value />
+      </item>
+      <item>
+        <key>Business Process Level</key>
+        <value />
+      </item>
+      <item>
+        <key>Care setting</key>
+        <value />
+      </item>
+      <item>
+        <key>Client group</key>
+        <value />
+      </item>
+      <item>
+        <key>Clinical Record Element</key>
+        <value />
+      </item>
+      <item>
+        <key>Copyright</key>
+        <value />
+      </item>
+      <item>
+        <key>Issues</key>
+        <value />
+      </item>
+      <item>
+        <key>Owner</key>
+        <value />
+      </item>
+      <item>
+        <key>Sign off</key>
+        <value />
+      </item>
+      <item>
+        <key>Speciality</key>
+        <value />
+      </item>
+      <item>
+        <key>User roles</key>
+        <value />
+      </item>
+    </other_details>
+  </description>
+  <definition xsi:type="OBSERVATION" archetype_id="openEHR-EHR-OBSERVATION.respiration.v1" concept_name="Respirations">
+    <Rule path="/data[at0001]/events[at0002]" max="1">
+      <eventConstraint>
+        <allowedType>PointInTime</allowedType>
+      </eventConstraint>
+    </Rule>
+    <Rule path="/data[at0001]/events[at0002]/data[at0003]/items[at0004]" name="Rate of respiration" />
+    <Rule path="/data[at0001]/events[at0002]/data[at0003]/items[at0024]" default="No description" hide_on_form="true" />
+    <Rule path="/data[at0001]/events[at0002]/data[at0003]/items[at0009]" default="Not abnormal">
+      <constraint xsi:type="multipleConstraint">
+        <includedTypes>Text</includedTypes>
+      </constraint>
+    </Rule>
+    <Items xsi:type="CLUSTER" archetype_id="openEHR-EHR-CLUSTER.ambient_oxygen.v1" concept_name="Ambient oxygen" path="/data[at0001]/events[at0002 and name/value='Any event']/state[at0022]/items[at0055]">
+      <Rule path="/items[at0051]" annotation="Preferred unit is ml/min" />
+      <Rule path="/items[at0053]" max="0" />
+    </Items>
+  </definition>
+</template>

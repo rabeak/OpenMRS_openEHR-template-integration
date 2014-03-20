@@ -63,7 +63,7 @@ public class GenerateCompTemplate {
 			    Source source;
 			    if (opt_file_path.equalsIgnoreCase("respiration"))
 			    {
-			    	source = new StreamSource("src/main/resources/Templates/openEHR-EHR-OBSERVATION.respiration.v1.template.opt");
+			    	source = new StreamSource("src/main/resources/Templates/openEHR-EHR-OBSERVATION.t_respiration.v1.opt");
 			    } else {
 			    source = new StreamSource(opt_file_path);
 			    }

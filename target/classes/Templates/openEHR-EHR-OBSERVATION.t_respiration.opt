@@ -33,12 +33,12 @@
     </details>
   </description>
   <uid>
-    <value>a325d3ca-de37-4814-b54f-ac844bf9edf8</value>
+    <value>104d468b-9666-450c-b4c0-15fe67c508a6</value>
   </uid>
   <template_id>
-    <value>openEHR-EHR-OBSERVATION.respiration.v1.template</value>
+    <value>openEHR-EHR-OBSERVATION.t_respiration.v1</value>
   </template_id>
-  <concept>openEHR-EHR-OBSERVATION.respiration.v1.template</concept>
+  <concept>openEHR-EHR-OBSERVATION.t_respiration.v1</concept>
   <definition>
     <rm_type_name>OBSERVATION</rm_type_name>
     <occurrences>
@@ -826,7 +826,7 @@
       <value>openEHR-EHR-OBSERVATION.respiration.v1</value>
     </archetype_id>
     <template_id>
-      <value>openEHR-EHR-OBSERVATION.respiration.v1.template</value>
+      <value>openEHR-EHR-OBSERVATION.t_respiration.v1</value>
     </template_id>
     <term_definitions code="at0000">
       <items id="description">The observed characteristics of spontaneous breathing as would commonly be recorded as part of a 'vital signs' examination.</items>
