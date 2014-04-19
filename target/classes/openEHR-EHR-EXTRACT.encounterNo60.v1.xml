@@ -4,7 +4,7 @@
     <value>Encounter No. 60</value>
   </name>
   <uid xsi:type="HIER_OBJECT_ID">
-    <value>9e70851d-b028-43a8-8d9e-03c946aa02da</value>
+    <value>f9b14aaf-8819-4381-9458-3701fc7ddd93</value>
   </uid>
   <sequence_nr>1</sequence_nr>
   <chapters archetype_node_id="at0000">
@@ -15,7 +15,7 @@
     <content xsi:type="GENERIC_EXTRACT_CONTENT">
       <items xsi:type="GENERIC_EXTRACT_ITEM">
         <uid xsi:type="HIER_OBJECT_ID">
-          <value>a82857ff-3dd4-49a2-b74f-e8e20f5eecd5</value>
+          <value>b75a726c-06f4-448e-9778-0aee86821ace</value>
         </uid>
         <is_primary>true</is_primary>
         <is_changed>false</is_changed>
@@ -136,22 +136,8 @@
                     </value>
                   </items>
                 </items>
-                <items archetype_node_id="at0056" xsi:type="ELEMENT">
-                  <name xsi:type="DV_TEXT">
-                    <value>Confounding factors</value>
-                  </name>
-                  <value xsi:type="DV_TEXT">
-                    <value>Factor 2</value>
-                  </value>
-                </items>
-                <items archetype_node_id="at0056" xsi:type="ELEMENT">
-                  <name xsi:type="DV_TEXT">
-                    <value>Confounding factors</value>
-                  </name>
-                  <value xsi:type="DV_TEXT">
-                    <value>Factor 1</value>
-                  </value>
-                </items>
+                <items archetype_node_id="at0056' and @xsi:type='ELEMENT" xsi:type="ELEMENT" />
+                <items archetype_node_id="at0056' and @xsi:type='ELEMENT" xsi:type="ELEMENT" />
                 <items archetype_node_id="openEHR-EHR-CLUSTER.level_of_exertion.v1" xsi:type="CLUSTER">
                   <name xsi:type="DV_TEXT">
                     <value>Level of exertion</value>

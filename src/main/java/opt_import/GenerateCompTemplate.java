@@ -463,6 +463,12 @@ public class GenerateCompTemplate {
 					cobject.setPath("");
 					children.add((CPRIMITIVEOBJECT)cobject);
 					
+				} else if (cobject instanceof CCODEREFERENCE) {
+					/*includes a reference uri to an external code set --> not implemented yet*/
+					cobject.setXPath("[@xsi:type='"+cobject.getRmTypeName()+"']");
+					cobject.setPath("");
+					children.add((CCODEREFERENCE)cobject);
+					
 				} else if (cobject instanceof CCODEPHRASE) {
 					cobject.setXPath("[@xsi:type='"+cobject.getRmTypeName()+"']");
 					cobject.setPath("");

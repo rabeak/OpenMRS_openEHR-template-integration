@@ -4,7 +4,7 @@
     <value>Encounter No. 60</value>
   </name>
   <uid xsi:type="HIER_OBJECT_ID">
-    <value>9e70851d-b028-43a8-8d9e-03c946aa02da</value>
+    <value>3c520f0f-fa4b-4614-a14b-5613334ee458</value>
   </uid>
   <sequence_nr>1</sequence_nr>
   <chapters archetype_node_id="at0000">
@@ -15,7 +15,7 @@
     <content xsi:type="GENERIC_EXTRACT_CONTENT">
       <items xsi:type="GENERIC_EXTRACT_ITEM">
         <uid xsi:type="HIER_OBJECT_ID">
-          <value>a82857ff-3dd4-49a2-b74f-e8e20f5eecd5</value>
+          <value>fe4fab51-8277-4cce-b783-ba6d72248cb1</value>
         </uid>
         <is_primary>true</is_primary>
         <is_changed>false</is_changed>

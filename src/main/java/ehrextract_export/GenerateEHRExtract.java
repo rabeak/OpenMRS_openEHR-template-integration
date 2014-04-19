@@ -48,7 +48,7 @@ public class GenerateEHRExtract {
 		this.getDBConnection();
 		LinkedHashMap<String,String> extractData = new LinkedHashMap<String,String>();		
 		extractData=dbStatements.getObsAndPathsFromEncounterId(connect, encounterId);
-		Document ehrExtract=createXML(extractData);
+		Document ehrExtract=generateXML(extractData);
 		cleanXML(ehrExtract, extractData);
 		validateEHRExtract(ehrExtract);
 		try {
@@ -60,111 +60,106 @@ public class GenerateEHRExtract {
 	}
 	
 	
-	private Document createXML(LinkedHashMap<String, String> extractDataMap) {
-		Namespace XSI_NAMESPACE = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		Namespace OPENEHR_NAMESPACE = Namespace.getNamespace("http://schemas.openehr.org/v1");
+	private Document generateXML(LinkedHashMap<String, String> extractDataMap) {
+		Namespace xsiNS = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		Namespace openEHRNS = Namespace.getNamespace("http://schemas.openehr.org/v1");
 
-		Element rootElement = new Element("extract", OPENEHR_NAMESPACE);
-		rootElement.addNamespaceDeclaration(XSI_NAMESPACE);
-		rootElement.addNamespaceDeclaration(OPENEHR_NAMESPACE);
-		
-/*		Attribute schemaLoc = new Attribute("schemaLocation", "http://schemas.openehr.org/v1 C:\\Users\\Rabea\\workspace1\\openmrs-template-integration-v2\\src\\main\\schemas\\extract.xsd",
-			    XSI_NAMESPACE);
-		rootElement.setAttribute(schemaLoc);*/
+		Element root = new Element("extract", openEHRNS);
+		root.addNamespaceDeclaration(xsiNS);
+		root.addNamespaceDeclaration(openEHRNS);
 		
 		//TODO: adding node id of the AT root node???
-		rootElement.setAttribute(new Attribute("archetype_node_id", "openEHR-EHR-EXTRACT.encounterNo"+encounterId+".v1"));
+		root.setAttribute(new Attribute("archetype_node_id", "openEHR-EHR-EXTRACT.encounterNo"+encounterId+".v1"));
 		
-		Element name=new Element("name", OPENEHR_NAMESPACE);
-		name.addContent(new Element("value", OPENEHR_NAMESPACE).addContent("Encounter No. " +encounterId));
-		rootElement.addContent(name);
+		Element name=new Element("name", openEHRNS);
+		name.addContent(new Element("value", openEHRNS).addContent("Encounter No. " +encounterId));
+		root.addContent(name);
 		
-		Element uid=new Element("uid", OPENEHR_NAMESPACE);
-		uid.setAttribute("type", "HIER_OBJECT_ID", XSI_NAMESPACE);
-		uid.addContent(new Element("value", OPENEHR_NAMESPACE).addContent(UUID.randomUUID().toString()));
-		rootElement.addContent(uid);
-		rootElement.addContent(new Element("sequence_nr", OPENEHR_NAMESPACE).addContent("1")); //mandatory element, default value = 1
+		Element uid=new Element("uid", openEHRNS);
+		uid.setAttribute("type", "HIER_OBJECT_ID", xsiNS);
+		uid.addContent(new Element("value", openEHRNS).addContent(UUID.randomUUID().toString()));
+		root.addContent(uid);
+		root.addContent(new Element("sequence_nr", openEHRNS).addContent("1")); //mandatory element, default value = 1
 		
 		//according to old extract specification (revision 2.0)
-		Element chapter=new Element("chapters", OPENEHR_NAMESPACE);
+		Element chapter=new Element("chapters", openEHRNS);
 		chapter.setAttribute(new Attribute("archetype_node_id", "at0000"));
-		Element chapterName=new Element("name", OPENEHR_NAMESPACE);
-		chapterName.addContent(new Element("value", OPENEHR_NAMESPACE).addContent("openEHR-EHR-EXTRACT_CHAPTER")); //TODO ???
+		Element chapterName=new Element("name", openEHRNS);
+		chapterName.addContent(new Element("value", openEHRNS).addContent("openEHR-EHR-EXTRACT_CHAPTER")); //TODO ???
 		chapter.addContent(chapterName);
-		chapter.addContent(new Element("entity_identifier", OPENEHR_NAMESPACE));	
-		Element content=new Element("content", OPENEHR_NAMESPACE);		
-		content.setAttribute(new Attribute("type", "GENERIC_EXTRACT_CONTENT", XSI_NAMESPACE));
-		Element items=new Element("items", OPENEHR_NAMESPACE); //generic extract item
-		items.setAttribute(new Attribute("type", "GENERIC_EXTRACT_ITEM", XSI_NAMESPACE));
-		Element uid2=new Element("uid", OPENEHR_NAMESPACE);
-		uid2.setAttribute("type", "HIER_OBJECT_ID", XSI_NAMESPACE);
-		uid2.addContent(new Element("value", OPENEHR_NAMESPACE).addContent(UUID.randomUUID().toString()));
+		chapter.addContent(new Element("entity_identifier", openEHRNS));	
+		Element content=new Element("content", openEHRNS);		
+		content.setAttribute(new Attribute("type", "GENERIC_EXTRACT_CONTENT", xsiNS));
+		Element items=new Element("items", openEHRNS); //generic extract item
+		items.setAttribute(new Attribute("type", "GENERIC_EXTRACT_ITEM", xsiNS));
+		Element uid2=new Element("uid", openEHRNS);
+		uid2.setAttribute("type", "HIER_OBJECT_ID", xsiNS);
+		uid2.addContent(new Element("value", openEHRNS).addContent(UUID.randomUUID().toString()));
 		items.addContent(uid2);
-		items.addContent(new Element("is_primary", OPENEHR_NAMESPACE).addContent("true"));
-		items.addContent(new Element("is_changed", OPENEHR_NAMESPACE).addContent("false"));
-		items.addContent(new Element("is_masked", OPENEHR_NAMESPACE).addContent("false"));		
+		items.addContent(new Element("is_primary", openEHRNS).addContent("true"));
+		items.addContent(new Element("is_changed", openEHRNS).addContent("false"));
+		items.addContent(new Element("is_masked", openEHRNS).addContent("false"));		
 		content.addContent(items); 		
 		chapter.addContent(content);
-		rootElement.addContent(chapter);
+		root.addContent(chapter);
 		
 		//according to new extract specification (Rev 2.1)
-/*		Element extractEntityChapter=new Element("extract_entity_chapter", OPENEHR_NAMESPACE);
+		/*Element extractEntityChapter=new Element("extract_entity_chapter", openEHRNS);
 		extractEntityChapter.setAttribute(new Attribute("archetype_node_id", "")); //TODO
-		Element entityChapterName=new Element("name", OPENEHR_NAMESPACE);
+		Element entityChapterName=new Element("name", openEHRNS);
 		entityChapterName.addContent(""); //TODO
 		extractEntityChapter.addContent(entityChapterName);
-		Element entityId=new Element("entity_identifier", OPENEHR_NAMESPACE);
-		Element extract_id_key=new Element("extract_id_key", OPENEHR_NAMESPACE); //Identifier by which this entity is known in the Extract
+		Element entityId=new Element("entity_identifier", openEHRNS);
+		Element extract_id_key=new Element("extract_id_key", openEHRNS); //Identifier by which this entity is known in the Extract
 		extract_id_key.addContent(""); //TODO
 		entityId.addContent(extract_id_key);
 		extractEntityChapter.addContent(entityId);
-		rootElement.addContent(extractEntityChapter);
+		root.addContent(extractEntityChapter);
 		//generic extract item:
-		Element items=new Element("items", OPENEHR_NAMESPACE); //in Element items kommen die item-Elemente vom Typ Locatable hinein
-		Element uid=new Element("uid", OPENEHR_NAMESPACE);
-		Element isPrimary=new Element("is_primary", OPENEHR_NAMESPACE);
+		Element items=new Element("items", openEHRNS); //in Element items kommen die item-Elemente vom Typ Locatable hinein
+		Element uid=new Element("uid", openEHRNS);
+		Element isPrimary=new Element("is_primary", openEHRNS);
 		isPrimary.addContent("true");
 		items.addContent(uid);
 		items.addContent(isPrimary);
 		extractEntityChapter.addContent(items); */
 							
-		Document doc = new Document(rootElement);
+		Document extractDoc = new Document(root);
 
 		for (Map.Entry<String, String> entry : extractDataMap.entrySet()) {
 			String path=entry.getKey();
 			String value=entry.getValue();
-			doc = addElementFromMap(path, value, doc);
+			extractDoc = addXMLElementFromPath(path, value, extractDoc);
 		}
-		//Element itemType=new Element("item_type", OPENEHR_NAMESPACE);
+		//Element itemType=new Element("item_type", openEHRNS);
 		//items.addContent(itemType);
-		return doc;
+		return extractDoc;
 	}
 	
-	private Document addElementFromMap(String key, String value, Document doc) {
-		Namespace XSI_NAMESPACE = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		Namespace OPENEHR_NAMESPACE = Namespace.getNamespace("http://schemas.openehr.org/v1");
+	private Document addXMLElementFromPath(String pPath, String value, Document xmlDoc) {
+		Namespace xsiNS = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		Namespace openEHRNS = Namespace.getNamespace("http://schemas.openehr.org/v1");
 		
 		try {
 			/*prefix oehr is assigned to the openehr namespace, as xpath supports no default namespace (xmlns)
 			 * oehr is added to all paths too*/
-			String temp11 = key.replace("/", "/oehr:");
-			String temp33 = "/oehr:extract/oehr:chapters/oehr:content/oehr:items/oehr:item"+temp11.replace("/oehr:at", "/at");
+			String pathNS = pPath.replace("/", "/oehr:");
+			String fullPathNS = "/oehr:extract/oehr:chapters/oehr:content/oehr:items/oehr:item"+pathNS.replace("/oehr:at", "/at");
 
-			XPath xpath = XPath.newInstance(temp33);
-			Namespace nsConfig = Namespace.getNamespace("oehr", "http://schemas.openehr.org/v1");
-			xpath.addNamespace(nsConfig);
-			if (xpath.selectSingleNode(doc) == null) {
+			XPath xpath = XPath.newInstance(fullPathNS);
+			Namespace nsOEHR = Namespace.getNamespace("oehr", "http://schemas.openehr.org/v1");
+			xpath.addNamespace(nsOEHR);
+			if (xpath.selectSingleNode(xmlDoc) == null) {
 				/*nodeInformation includes the name of the parent as well as elements, attribute values etc. parsed from the xpath*/
-				HashMap<String, String> nodeInformation = getXpathParent("/extract/chapters/content/items/item"+key); 
-				String temp1 = nodeInformation.get("parent").replace("/", "/oehr:");			
-				String temp3 = temp1.replace("/oehr:at", "/at");
+				HashMap<String, String> nodeInformation = getParentFromXPath("/extract/chapters/content/items/item"+pPath); 
+				String parentPathNS = nodeInformation.get("parentXPath").replace("/", "/oehr:");			
+				String parentPathWONS = parentPathNS.replace("/oehr:at", "/at");
 
-				XPath parentXPath = XPath.newInstance(temp3);
-				Namespace nsConfig1 = Namespace.getNamespace("oehr", "http://schemas.openehr.org/v1");
-				parentXPath.addNamespace(nsConfig1);
+				XPath parentXPath = XPath.newInstance(parentPathWONS);
+				parentXPath.addNamespace(nsOEHR);
 
-				if (parentXPath.selectSingleNode(doc) != null) {
-					Element element=new Element(nodeInformation.get("element"), OPENEHR_NAMESPACE);
+				if (parentXPath.selectSingleNode(xmlDoc) != null) {
+					Element element=new Element(nodeInformation.get("elementName"), openEHRNS);
 					if (nodeInformation.get("archetype_node_id") != null) {
 						element.setAttribute(new Attribute("archetype_node_id", nodeInformation.get("archetype_node_id")));
 					}
@@ -173,15 +168,15 @@ public class GenerateEHRExtract {
 						if(type.equalsIgnoreCase("Iso8601DateTime")) { /*changing format*/
 							value=value.replaceAll("\\s+", "T"); /*replacing whitespaces with T*/
 						}
-						element.setAttribute("type", type, XSI_NAMESPACE);
+						element.setAttribute("type", type, xsiNS);
 					} 
 					element.setText(value);
-					Element node = (Element) parentXPath.selectSingleNode(doc);
+					Element parentNode = (Element) parentXPath.selectSingleNode(xmlDoc);
 
-					if (nodeInformation.get("element").equalsIgnoreCase("name") && element.getAttribute("type", XSI_NAMESPACE).getValue().equalsIgnoreCase("DV_TEXT")) {
-						node.addContent(0, element);
+					if (nodeInformation.get("elementName").equalsIgnoreCase("name") && element.getAttribute("type", xsiNS).getValue().equalsIgnoreCase("DV_TEXT")) {
+						parentNode.addContent(0, element);
 					} else {
-						node.addContent(element);
+						parentNode.addContent(element);
 					}
 					//System.out.println("Done! XPath: "+xpath.getXPath());
 				} else {
@@ -192,57 +187,66 @@ public class GenerateEHRExtract {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return doc;
+		return xmlDoc;
 	}
 	
-	private HashMap<String, String> getXpathParent(String key) {
-		HashMap<String, String> newParent = new HashMap<String, String>();
-		String newParents = "";
+	private HashMap<String, String> getParentFromXPath(String path) {
+		
+		int posLastBracketOpen=path.lastIndexOf("[");
+		int posLastBracketClose=path.lastIndexOf("]");
+		int posLastSlash=path.lastIndexOf("/");
+		
+		HashMap<String, String> parentInfoMap = new HashMap<String, String>();
 
-		if (key.lastIndexOf("]") < key.lastIndexOf("/")) {
+		if (posLastBracketClose > posLastSlash) {
 
-			newParent.put("parent", key.substring(0, key.lastIndexOf("/")));
-			newParent.put("element", key.substring(key.lastIndexOf("/") + 1, key.length()));
-		} else {
-			newParents = key.substring(key.lastIndexOf("[") + 1, key.lastIndexOf("]"));
-			if (newParents.matches("\\d+")) { /*if the path includes a number at the end, e.g.[1]*/
-				String temp = key.substring(0, key.lastIndexOf("["));
-				String tempT = temp.substring(0, temp.lastIndexOf("["));
-				newParent.put("element", tempT.substring(tempT.lastIndexOf("/") + 1, tempT.length()));
-
-				String tempAusdruck = key.substring(temp.lastIndexOf("["), temp.lastIndexOf("]"));
-				if (tempAusdruck.contains("@archetype_node_id")) {
-					String tempat = tempAusdruck.substring(tempAusdruck.indexOf("@archetype_node_id") + 20, tempAusdruck.length());
-					newParent.put("archetype_node_id", tempat.substring(0, tempat.indexOf("'")));
+			String pathWOBrackets = path.substring(0, posLastBracketOpen);
+			String textInBrackets = path.substring(posLastBracketOpen + 1, posLastBracketClose);
+			
+			if (textInBrackets.matches("\\d+")) { /*if the path includes a number at the end, e.g.[1]*/
+				
+				String pathCorr = pathWOBrackets.substring(0, pathWOBrackets.lastIndexOf("["));
+				parentInfoMap.put("elementName", pathCorr.substring(pathCorr.lastIndexOf("/") + 1, pathCorr.length()));
+				
+				String parentPath = pathWOBrackets.substring(0, pathCorr.lastIndexOf("/"));
+				parentInfoMap.put("parentXPath", parentPath);
+				
+				String textInBrackets2 = pathWOBrackets.substring(pathWOBrackets.lastIndexOf("[")+1, pathWOBrackets.lastIndexOf("]"));
+				
+				if (textInBrackets2.contains("@xsi:type")) {
+					String typeText = textInBrackets2.substring(textInBrackets2.indexOf("@xsi:type") + 11, textInBrackets2.length());
+					parentInfoMap.put("xsi:type", getXMLSimpleType(typeText.substring(0, typeText.indexOf("'"))));										
 				}
-				if (tempAusdruck.contains("@xsi:type")) {
-					String tempat = tempAusdruck.substring(tempAusdruck.indexOf("@xsi:type") + 11, tempAusdruck.length());
-					newParent.put("xsi:type", getXMLSimpleType(tempat.substring(0, tempat.indexOf("'"))));										
+				
+				if (textInBrackets2.contains("@archetype_node_id")) {
+					String atNodeId = textInBrackets2.substring(textInBrackets2.indexOf("@archetype_node_id") + 20, textInBrackets2.length());
+					parentInfoMap.put("archetype_node_id", atNodeId.substring(0, atNodeId.indexOf("'")));
 				}
-				newParents = key.substring(0, temp.substring(0, temp.lastIndexOf("[") + 1).lastIndexOf("/"));
-				newParent.put("parent", newParents);
+
 			} else {
-				String temp = key.substring(0, key.lastIndexOf("["));
-				newParent.put("element", temp.substring(temp.lastIndexOf("/") + 1, temp.length()));
+				parentInfoMap.put("elementName", pathWOBrackets.substring(pathWOBrackets.lastIndexOf("/") + 1, pathWOBrackets.length()));
+				String parentPath = path.substring(0, pathWOBrackets.lastIndexOf("/"));
+				parentInfoMap.put("parentXPath", parentPath);
 
-				String tempAusdruck = key.substring(key.lastIndexOf("[") + 1, key.lastIndexOf("]"));
-				if (tempAusdruck.contains("@archetype_node_id")) {
-					String tempat = tempAusdruck.substring(tempAusdruck.indexOf("@archetype_node_id") + 20, tempAusdruck.length());
-					newParent.put("archetype_node_id", tempat.substring(0, tempat.indexOf("'")));
+				if (textInBrackets.contains("@xsi:type")) {
+					String typeText = textInBrackets.substring(textInBrackets.indexOf("@xsi:type") + 11, textInBrackets.length());				
+					parentInfoMap.put("xsi:type", getXMLSimpleType(typeText.substring(0, typeText.indexOf("'"))));					
 				}
-				if (tempAusdruck.contains("@xsi:type")) {
-					String tempat = tempAusdruck.substring(tempAusdruck.indexOf("@xsi:type") + 11, tempAusdruck.length());				
-					newParent.put("xsi:type", getXMLSimpleType(tempat.substring(0, tempat.indexOf("'"))));					
+				
+				if (textInBrackets.contains("@archetype_node_id")) {
+					String atNodeId = textInBrackets.substring(textInBrackets.indexOf("@archetype_node_id") + 20, textInBrackets.length());
+					parentInfoMap.put("archetype_node_id", atNodeId.substring(0, atNodeId.indexOf("'")));
 				}
-				newParents = key.substring(0, key.substring(0, key.lastIndexOf("[") + 1).lastIndexOf("/"));
-				newParent.put("parent", newParents);
-			}
+			}			
+		} else {
+			parentInfoMap.put("parentXPath", path.substring(0, posLastSlash));
+			parentInfoMap.put("elementName", path.substring(posLastSlash + 1, path.length()));
 		}
-		return newParent;
+		return parentInfoMap;
 	}
 	
-	public void cleanXML(Document ehrExtract, LinkedHashMap<String,String> xpathsMap) { /*empty nodes are deleted*/
-		/*xpaths are processed backwards and empty XML elements are delted
+	public void cleanXML(Document ehrExtract, LinkedHashMap<String,String> xpathsMap) { 
+		/*xpaths are processed backwards and empty XML elements are deleted
 		 * afterwards elements which only include name or terminology_id are deleted*/
 		
 		List<String> xpaths = new ArrayList<String>(xpathsMap.keySet());
