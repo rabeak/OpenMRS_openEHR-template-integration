@@ -401,7 +401,28 @@ public class GenerateCompTemplate {
 
 				} else if (cobject instanceof ARCHETYPESLOT) {
 					
-					System.out.println("An archetype slot has been found!");
+					String nodeName="";
+					/*retrieving the node name if possible*/
+					if (cobject.getNodeId()!=null && cobject.getNodeId()!="" && cobject.getNodeId()!=" ") {						
+						String adaptedNodeId=cobject.getNodeId();
+						if(!this.goid.equalsIgnoreCase("")) {
+							adaptedNodeId=cobject.getNodeId().substring(0,2)+this.goid+"."+cobject.getNodeId().substring(2);
+						}
+						for (ARCHETYPETERM term : template.getDefinition().getTermDefinitions()) {
+							if (term.getCode().equalsIgnoreCase(adaptedNodeId)) {
+								for (StringDictionaryItem dict_item:term.getItems())
+								{
+									if(dict_item.getId().equalsIgnoreCase("text"))
+									{
+										nodeName=dict_item.getValue();
+									}
+								}
+								
+							}			
+						}
+					}
+					
+					System.out.println("An archetype slot has been found: " + nodeName);
 					String chosen_at = "j";
 					/*if the slot is optional, the user is asked whether the slot should be filled*/
 					if(((ARCHETYPESLOT)cobject).getOccurrences().getLower()==0) {
