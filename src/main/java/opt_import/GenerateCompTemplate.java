@@ -121,7 +121,7 @@ public class GenerateCompTemplate {
 		
 		List<CATTRIBUTE> cattributes = new ArrayList<CATTRIBUTE>();
 
-		for (String[] RMElement : getRMElements(ccomplexobj.getRmTypeName())) {
+		for (String[] rmElement : getRmElements(ccomplexobj.getRmTypeName())) {
 			
 			/* all mandatory RM elements are included in the RMElement array
 			* if element doesn't exist, its created*/
@@ -130,14 +130,14 @@ public class GenerateCompTemplate {
 			if (ccomplexobj.getAttributes() != null) {
 
 				for (CATTRIBUTE cattribute : ccomplexobj.getAttributes()) {
-					if (cattribute.getRmAttributeName().equalsIgnoreCase(RMElement[0])) {
+					if (cattribute.getRmAttributeName().equalsIgnoreCase(rmElement[0])) {
 						cattribute.setParent(ccomplexobj);
 						/*if a new name has been defined for this node in the template, its added to the term definitions of the according COBJECT
 						 * --> no good solution*/
 						if(cattribute.getRmAttributeName().equalsIgnoreCase("name")) {
 							checkForNewName(cattribute);						
 						}
-						cattributes.add(addRMattributes(cattribute));
+						cattributes.add(addRmAttributes(cattribute));
 						elementExists = true;
 
 					}
@@ -145,10 +145,10 @@ public class GenerateCompTemplate {
 			}
 			/*element doesn't exist and is created
 			 * if the element is abstract or a subclass of LOCATABLE, a default object can't be created*/
-			boolean abstractElement=checkIfAbstract(RMElement[1]);
-			boolean childOfLocatable=checkIfChildOfLocatable(RMElement[1]);
+			boolean abstractElement=checkIfAbstract(rmElement[1]);
+			boolean childOfLocatable=checkIfChildOfLocatable(rmElement[1]);
 								
-			if (!abstractElement && !childOfLocatable && !elementExists && Integer.parseInt(RMElement[2]) > 0 ) {				
+			if (!abstractElement && !childOfLocatable && !elementExists && Integer.parseInt(rmElement[2]) > 0 ) {				
 				IntervalOfInteger required=new IntervalOfInteger();
 				required.setLower(1);
 				required.setUpper(1);
@@ -157,7 +157,7 @@ public class GenerateCompTemplate {
 				optional.setUpper(1);
 				IntervalOfInteger existence=new IntervalOfInteger();
 				
-				if (RMElement[2].equalsIgnoreCase("1")) {
+				if (rmElement[2].equalsIgnoreCase("1")) {
 					existence = required;
 				} else {
 					existence = optional;
@@ -165,18 +165,18 @@ public class GenerateCompTemplate {
 
 				try {
 					Integer upper;
-					if (RMElement[3].equalsIgnoreCase("*")) {
+					if (rmElement[3].equalsIgnoreCase("*")) {
 						upper = null;
 					} else {
-						upper = Integer.parseInt(RMElement[3]);
+						upper = Integer.parseInt(rmElement[3]);
 					}
 					
 					/*simple data types*/
-					if (RMElement[1].equalsIgnoreCase("string") || RMElement[1].equalsIgnoreCase("boolean") || RMElement[1].equalsIgnoreCase("real") || RMElement[1].equalsIgnoreCase("integer") || RMElement[1].equalsIgnoreCase("character")) {
+					if (rmElement[1].equalsIgnoreCase("string") || rmElement[1].equalsIgnoreCase("boolean") || rmElement[1].equalsIgnoreCase("real") || rmElement[1].equalsIgnoreCase("integer") || rmElement[1].equalsIgnoreCase("character")) {
 						
 						CATTRIBUTE newCattribute = new CSINGLEATTRIBUTE();
 						newCattribute.setExistence(existence);
-						newCattribute.setRmAttributeName(RMElement[0]);
+						newCattribute.setRmAttributeName(rmElement[0]);
 						newCattribute.setParent(ccomplexobj);
 						newCattribute.setXPath("/" + newCattribute.getRmAttributeName());
 						newCattribute.setPath("/" + newCattribute.getRmAttributeName());
@@ -187,7 +187,7 @@ public class GenerateCompTemplate {
 						newCprim.setNodeId(null);
 
 						CPRIMITIVE newVal=new CSTRING();
-						if(RMElement[0].equalsIgnoreCase("value")) { 
+						if(rmElement[0].equalsIgnoreCase("value")) { 
 							/*in case of a value attribute the data type is adapted to the DV-type
 							 * e.g. in case of a DV_DATE a C_DATE is created*/
 							if(ccomplexobj.getRmTypeName().equalsIgnoreCase("DV_TEXT")) {
@@ -221,19 +221,19 @@ public class GenerateCompTemplate {
 								newCprim.setXPath("");
 							}
 						} else { /*else type depends on the specified data type*/
-							if(RMElement[1].equalsIgnoreCase("string") || RMElement[1].equalsIgnoreCase("character")) {
+							if(rmElement[1].equalsIgnoreCase("string") || rmElement[1].equalsIgnoreCase("character")) {
 								newVal=new CSTRING();
 								newCprim.setPath("");
 								newCprim.setXPath("");
-							} else if(RMElement[1].equalsIgnoreCase("boolean")) {
+							} else if(rmElement[1].equalsIgnoreCase("boolean")) {
 								newVal=new CBOOLEAN();
 								newCprim.setPath("");
 								newCprim.setXPath("");
-							} else if(RMElement[1].equalsIgnoreCase("real")) {
+							} else if(rmElement[1].equalsIgnoreCase("real")) {
 								newVal=new CREAL();
 								newCprim.setPath("");
 								newCprim.setXPath("");
-							} else if(RMElement[1].equalsIgnoreCase("integer")) {
+							} else if(rmElement[1].equalsIgnoreCase("integer")) {
 								newVal=new CINTEGER();
 								newCprim.setPath("");
 								newCprim.setXPath("");
@@ -244,7 +244,7 @@ public class GenerateCompTemplate {
 							}
 						}
 						
-						if (RMElement[0].equalsIgnoreCase("archetype_node_id")) {	
+						if (rmElement[0].equalsIgnoreCase("archetype_node_id")) {	
 							newVal = new CSTRING();
 
 							/*if the node has a node id, its added to this attribute*/
@@ -275,32 +275,32 @@ public class GenerateCompTemplate {
 					else {
 						CATTRIBUTE newCattribute = new CSINGLEATTRIBUTE();
 						newCattribute.setExistence(existence);
-						newCattribute.setRmAttributeName(RMElement[0]);
+						newCattribute.setRmAttributeName(rmElement[0]);
 						newCattribute.setParent(ccomplexobj);
 
 						IntervalOfInteger interval=new IntervalOfInteger();
-						interval.setLower(Integer.parseInt(RMElement[2]));
+						interval.setLower(Integer.parseInt(rmElement[2]));
 						optional.setUpper(upper);
 						
 						/*if the attribute is of type CODE_PHRASE code sets need to be included where necessary
 						 * if the attribute belongs to a node of type DV_CODED_TEXT, a C_COMPLEX_OBJECT is created*/
-						if(RMElement[1].equalsIgnoreCase("CODE_PHRASE") && !ccomplexobj.getRmTypeName().equalsIgnoreCase("DV_CODED_TEXT")) { 
+						if(rmElement[1].equalsIgnoreCase("CODE_PHRASE") && !ccomplexobj.getRmTypeName().equalsIgnoreCase("DV_CODED_TEXT")) { 
 							CCODEPHRASE newCcode=new CCODEPHRASE();
 							TERMINOLOGYID termId=new TERMINOLOGYID();
-							termId.setValue(getCodeSetFromAttributeName(RMElement[0]));
+							termId.setValue(getCodeSetFromAttributeName(rmElement[0]));
 							newCcode.setTerminologyId(termId); /*the name of the code set is used as terminologyID*/
 							/*the codes of the code set are selected in the method GenerateXForm*/
 							newCcode.setOccurrences(interval);
 							newCcode.setParent(newCattribute);
-							newCcode.setRmTypeName(RMElement[1]);
-							newCcode.setXPath("[@xsi:type='"+RMElement[1]+"']");
+							newCcode.setRmTypeName(rmElement[1]);
+							newCcode.setXPath("[@xsi:type='"+rmElement[1]+"']");
 							newCcode.setPath("");
 							newCattribute.getChildren().add(newCcode); 
 						} else {
 							CCOMPLEXOBJECT newCcomplex = new CCOMPLEXOBJECT();
-							newCcomplex.setXPath("[@xsi:type='"+RMElement[1]+"']");
+							newCcomplex.setXPath("[@xsi:type='"+rmElement[1]+"']");
 							newCcomplex.setPath("");
-							newCcomplex.setRmTypeName(RMElement[1]);
+							newCcomplex.setRmTypeName(rmElement[1]);
 							newCcomplex.setParent(newCattribute);
 							newCcomplex.setOccurrences(interval);
 							newCattribute.getChildren().add(addRmClasses(newCcomplex));	
@@ -311,7 +311,7 @@ public class GenerateCompTemplate {
 						cattributes.add(newCattribute);
 					}
 				} catch (Exception e) {
-					System.out.println("Error when trying to create element " + RMElement[0]);
+					System.out.println("Error when trying to create element " + rmElement[0]);
 					e.printStackTrace();
 				}
 			}
@@ -330,7 +330,7 @@ public class GenerateCompTemplate {
 			for (CATTRIBUTE cattribute : ccomplexobj.getAttributes()) {
 				if (cattribute.getParent()==null) {
 					cattribute.setParent(ccomplexobj);
-					cattribute=addRMattributes(cattribute);
+					cattribute=addRmAttributes(cattribute);
 				}
 			}
 		}
@@ -360,7 +360,7 @@ public class GenerateCompTemplate {
 		return ccomplexobj;
 	}
 	
-	private CATTRIBUTE addRMattributes(CATTRIBUTE cattribute) {
+	private CATTRIBUTE addRmAttributes(CATTRIBUTE cattribute) {
 		cattribute.setXPath("/" + cattribute.getRmAttributeName());
 		cattribute.setPath("/" + cattribute.getRmAttributeName());
 		List<COBJECT> children=new ArrayList<COBJECT>();
@@ -414,10 +414,10 @@ public class GenerateCompTemplate {
 						}
 					}
 					if (chosen_at.equalsIgnoreCase("y")) {
-						CARCHETYPEROOT at_root=fillATSlot((ARCHETYPESLOT)cobject);
+						CARCHETYPEROOT atRoot=fillAtSlot((ARCHETYPESLOT)cobject);
 						
-						if(at_root!=null) {
-							at_root.setParent(cattribute);
+						if(atRoot!=null) {
+							atRoot.setParent(cattribute);
 							/*the paths are adapted and inSlot is set to true*/
 							Boolean slotHelper=false;
 							Boolean helperFirst=this.rootNode; 
@@ -430,14 +430,14 @@ public class GenerateCompTemplate {
 							this.inSlot = true;
 							this.goid=String.valueOf(goidCounter+1);
 							this.goidCounter=this.goidCounter+1;
-							this.atName=at_root.getArchetypeId().getValue();
+							this.atName=atRoot.getArchetypeId().getValue();
 							/*the term definitions are added to the term definitions of the template and the node ids are changed*/
-							for(ARCHETYPETERM term:(at_root).getTermDefinitions()) {
+							for(ARCHETYPETERM term:(atRoot).getTermDefinitions()) {
 								term.setCode(term.getCode().substring(0,2)+this.goid+"."+term.getCode().substring(2));
 								template.getDefinition().getTermDefinitions().add(term);
 							}
-							at_root=(CARCHETYPEROOT)addRmClasses((CCOMPLEXOBJECT)at_root);
-							children.add(at_root);
+							atRoot=(CARCHETYPEROOT)addRmClasses((CCOMPLEXOBJECT)atRoot);
+							children.add(atRoot);
 							if (slotHelper == false) {
 								this.inSlot = false;
 							}
@@ -540,9 +540,9 @@ public class GenerateCompTemplate {
 			required.setLower(1);
 			required.setUpper(1);
 			/*type of the attribute is selected in order to be able to add children and mandatory attributes to it*/
-			for (String[] RMElement : getRMElements(cattribute.getParent().getRmTypeName())) {
+			for (String[] RMElement : getRmElements(cattribute.getParent().getRmTypeName())) {
 				if (RMElement[0].equalsIgnoreCase(cattribute.getRmAttributeName())) {
-					if (getRMElements(RMElement[1]).isEmpty()) {
+					if (getRmElements(RMElement[1]).isEmpty()) {
 						/*if no type is defined for the attribute*/					
 						cattribute.setXPath("/" + cattribute.getRmAttributeName());
 						cattribute.setPath("/" + cattribute.getRmAttributeName());
@@ -575,7 +575,7 @@ public class GenerateCompTemplate {
 		return cattribute;
 	}
 	
-	private CARCHETYPEROOT fillATSlot(ARCHETYPESLOT slot_cobject) {	
+	private CARCHETYPEROOT fillAtSlot(ARCHETYPESLOT slot_cobject) {	
 		
 		List<ASSERTION> assertions = slot_cobject.getIncludes();
 		CARCHETYPEROOT inclAT = new CARCHETYPEROOT(); /*instead of the slot a CARCHETYPEROOT element is added*/
@@ -638,7 +638,7 @@ public class GenerateCompTemplate {
 	}
 	
 	
-	public static List<String[]> getRMElements(String rmClassNameUnparsed) {
+	public static List<String[]> getRmElements(String rmClassNameUnparsed) {
 		List<String[]> rmElements = new ArrayList<String[]>();
 		/*rmClassName is parsed in case of a generic type, e.g. DV_INTERVAL<DV_COUNT>*/
 		String pattern = "(\\S+)(<(\\S*)>)";
